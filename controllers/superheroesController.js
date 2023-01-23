@@ -17,9 +17,9 @@ module.exports.getHeroes = async (req, res, next) => {
     const heroes = await Superheroes.findAll();
 
     if (heroes.lenght < 0) {
-      next(createHttpErrors(404, "Not not found"));
+      next(createHttpErrors(404, "Not found"));
     }
-
+    
     res.status(201).send({ data: heroes });
   } catch (error) {
     next(error);
@@ -37,7 +37,7 @@ module.exports.getHeroe = async (req, res, next) => {
     if (heroe) {
       res.status(201).send({ data: heroe });
     } else {
-      next(createHttpErrors(404, `Not not found`));
+      next(createHttpErrors(404, `Not found`));
     }
   } catch (error) {
     next(error);
@@ -57,7 +57,7 @@ module.exports.updateHeroe = async (req, res, next) => {
     if (updeteRows === 1) {
       res.status(201).send({ data: heroe });
     } else {
-      next(createHttpErrors(404, `${heroe}not not found`));
+      next(createHttpErrors(404, `Not found`));
     }
   } catch (error) {
     next(error);
@@ -68,7 +68,7 @@ module.exports.deleteHeroe = async (req, res, next) => {
   try {
     const heroe = await Superheroes.findByPk(req.params.superheroesId);
     if (!heroe) {
-      next(createHttpErrors(404, `Not not found`));
+      next(createHttpErrors(404, `Not  found`));
     }
     await heroe.destroy();
     res.status(201).send({ data: heroe });
