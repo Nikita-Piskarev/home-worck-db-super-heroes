@@ -69,24 +69,16 @@ module.exports.updatePeople = async (req, res, next) => {
   }
 };
 
-// module.exports.addPicToCar = async (req, res, next) => {
-//     const {
-//       body,
-//       file,
-//       params: { peopleId },
-//     } = req;
-//     try {
-//       const [updatedCars, [people]] = await People.update(
-//         { images: file.filename },
-//         { where: { id: peopleId }, returning: true }
-//       );
+module.exports.deletePeopel = async (req, res, next) => {
+  try {
+    const people = await People.findByPk(req.params.peopleId);
 
-//       if (updatedCars !== 1) {
-//         throw createHttpErrors(404, 'Car not found');
-//       }
-
-//       res.send({ data: people });
-//     } catch (error) {
-//       next(error);
-//     }
-//   };
+    if (!people) {
+      next(createHttpErrors(404, `Not  found`));
+    }
+    await people.destroy();
+    res.status(201).send({ data: people });
+  } catch (error) {
+    next(error);
+  }
+};

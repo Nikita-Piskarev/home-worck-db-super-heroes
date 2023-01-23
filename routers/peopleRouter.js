@@ -22,6 +22,7 @@ peopleRouter
 peopleRouter
   .route("/:peopleId")
   .post(upload.single("img"), PeopleContoller.updatePeople)
-  .get(PeopleContoller.getPeople);
+  .get(PeopleContoller.getPeople)
+  .delete(PeopleContoller.deletePeopel);
 
 module.exports = peopleRouter;
