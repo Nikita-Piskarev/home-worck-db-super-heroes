@@ -2,6 +2,7 @@ const peopleRouter = require("express").Router();
 const multer = require("multer");
 const path = require("path");
 
+const HeroeMW = require("../middlewares/superheroesMW");
 const PeopleContoller = require("../controllers/peopleController");
 
 const storage = multer.diskStorage({
@@ -24,5 +25,9 @@ peopleRouter
   .post(upload.single("img"), PeopleContoller.updatePeople)
   .get(PeopleContoller.getPeople)
   .delete(PeopleContoller.deletePeopel);
+peopleRouter
+  .route("/:peopleId/superheroes/:superheroesId")
+  .put(HeroeMW.getHeroe, PeopleContoller.addPeopleToSuperheroes)
+  .delete(PeopleContoller.deletePeoleToSuperheroes);
 
 module.exports = peopleRouter;

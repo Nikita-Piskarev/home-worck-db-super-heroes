@@ -51,7 +51,7 @@ module.exports.updatePeople = async (req, res, next) => {
     params: { peopleId },
   } = req;
   try {
-    const [updatedCars, [people]] = await People.update(
+    const [updatedPeopele, [people]] = await People.update(
       Object.assign({ images: file.filename }, body),
       {
         where: { id: peopleId },
@@ -59,8 +59,8 @@ module.exports.updatePeople = async (req, res, next) => {
       }
     );
 
-    if (updatedCars !== 1) {
-      throw createHttpErrors(404, "Car not found");
+    if (updatedPeopele !== 1) {
+      throw createHttpErrors(404, "Not found");
     }
 
     res.send({ data: people });
@@ -81,4 +81,34 @@ module.exports.deletePeopel = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+module.exports.addPeopleToSuperheroes = async (req, res, next) => {
+  const {
+    superheroes,
+    params: { peopleId },
+  } = req;
+
+  const people = await People.findByPk(peopleId);
+
+  if (!people) {
+    next(createHttpErrors(404, "Not found"));
+  }
+  await people.addSuperheroes(superheroes);
+  res.status(201).send({ data: "Superhero created" });
+};
+
+module.exports.deletePeoleToSuperheroes = async (req, res, next) => {
+  const {
+    params: { peopleId, superheroesId },
+  } = req;
+  const people = await PeopleToSuperheroes.findAll({
+    where: { peopleId: peopleId, superheroesId: superheroesId },
+  });
+
+  if (!people) {
+    next(createHttpErrors(404, "Not found"));
+  }
+  await people.destroy();
+  res.status(201).send({ data: people });
 };
